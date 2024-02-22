@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: cb992e462fb13be4ea9a0e6ff754d710
+timeCreated: 1493452188
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 101652
+  packageName: 3D Low Poly Car For Games (Tocus)
+  packageVersion: 1.0
+  assetPath: Assets/Car_Low/Tocus/Materials/Tocus_Exhaust_Pipe.mat
+  uploadId: 205688

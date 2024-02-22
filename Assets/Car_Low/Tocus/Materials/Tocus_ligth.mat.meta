@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: c920ee48dbabd264da8566508a7acd58
+timeCreated: 1493452187
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 101652
+  packageName: 3D Low Poly Car For Games (Tocus)
+  packageVersion: 1.0
+  assetPath: Assets/Car_Low/Tocus/Materials/Tocus_ligth.mat
+  uploadId: 205688

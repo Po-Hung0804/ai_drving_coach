@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 595e12d85144c7e47920445346303859
+timeCreated: 1493452187
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 101652
+  packageName: 3D Low Poly Car For Games (Tocus)
+  packageVersion: 1.0
+  assetPath: Assets/Car_Low/Tocus/Materials/Tocus_Plastics.mat
+  uploadId: 205688

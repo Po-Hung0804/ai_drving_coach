@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: db9051c0f0e895f4ab84eef0a87bc3a5
+timeCreated: 1494566215
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 101652
+  packageName: 3D Low Poly Car For Games (Tocus)
+  packageVersion: 1.0
+  assetPath: Assets/Car_Low/Tocus/Materials/Tocus_Windows.mat
+  uploadId: 205688
