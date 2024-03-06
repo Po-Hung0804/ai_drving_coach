@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System;
 using Unity.VisualScripting;
 using System.Linq.Expressions;
+
+
 namespace OpenAI
 {
     public class ChatGPT : MonoBehaviour
@@ -16,21 +18,39 @@ namespace OpenAI
         [SerializeField] private RectTransform sent;
         [SerializeField] private RectTransform received;
 
+        public bool VariableValue { get; private set; }
+        public bool sending=false;
         private float height;
         private OpenAIApi openai = new OpenAIApi();
         private List<ChatMessage> messages = new List<ChatMessage>();
-        private string prompt = "You are an AI coach, an automated service to teach customers to drive a car. You have to teach customers and achieve three targets. Your responses should only be related to driving class, and if the customer says something not about driving class, always respond about driving class. Make sure to ask relevant follow-up questions and follow the target to teach the customer.\r\n\r\nFirst target: Start the car, drive at a speed of 10 km/h for 50 meters, and then park.\r\nSecond target: Start the car, reverse for 5 meters at a speed of 5 km/h, and then park.\r\nThird target: Start the car, drive at a speed of 10 km/h, circle around a radius of 10 meters twice, and then park.\r\n\r\nEach target should be broken down into several steps for teaching, and each step should be taught separately. During driving, ask the customer to pay attention to surroundings, remind them to prioritize safety, and follow traffic rules.\r\n\r\nFirstly, introduce yourself and then tell the customer the first step. Wait for the customer to practice, and check whether it is correct. When the customer does it right, praise them and move on to the next step.\r\n\r\nIf they make a mistake, remind them. If they say, \"I don't know, show me,\" respond with, \"Okay, I'll demonstrate once.\" Then, have the customer repeat the practice until they do it correctly before moving on to the next step.\r\n\r\nThe steps for the first target are as follows:\r\n\r\nEnsure the car is in a parked state, insert the key into the ignition switch, and turn the switch to start the car.\r\nPress the brake pedal and shift to D (automatic) or first gear (manual).\r\nGently press the accelerator pedal to make the car move slowly, controlling the speed to around 10 km/h.\r\nAfter driving 50 meters, press the brake pedal, shift to P (automatic) or neutral (manual), and bring the car to a stop.";
+        private string prompt = "You are AI coach, an automated service to teach customer to drive the car. " +
+            "You have to teach customer and achieve three targets." +
+            "Your response is only about driving class and response with chinese." +
+            "If customer says somthing which is not about driving class always response about driving class." +
+            "Make sure to ask the user relevant follow-up questions." +
+            "And follow the target to teach customer."+
+            "The first target is start the car"+
+            "second target is driving the car strightly"+
+            "third target is turn left"+
+            "fourth target is turn right"+
+            "the last target is drive the destination";
         private string remind;
         public bool revisestart = false;
         public bool ai_signal = false;
         public float revise_motor = 0f;
+        public bool send = false;
         public void Start()
         {
-
-            button.onClick.AddListener(SendReply);
+ 
+            // button.onClick.AddListener(SendReply);
         }
         public void Update()
         {
+            if (sending == true)
+            {
+                SendReply();
+                sending = false;
+            }
             CarController1 script1Instance = GameObject.FindObjectOfType<CarController1>();
             if (inputField.text == "I don't know how to start the car")
             {
@@ -39,7 +59,7 @@ namespace OpenAI
                 if (script1Instance != null)
                 {
 
-                    script1Instance.ReceiveVariableValue(revisestart);
+                    script1Instance.ReceiveVariableValue(revisestart); 
 
                 }
                 else
@@ -63,7 +83,12 @@ namespace OpenAI
                 }
             }
         }
+        public void ReceiveVariableValue1(bool value)
+        {
 
+            VariableValue = value;
+            sending = VariableValue;
+        }
 
         public void AppendMessage(ChatMessage message)
         {
@@ -99,7 +124,7 @@ namespace OpenAI
             }
             messages.Add(newMessage);
             
-            button.enabled = false;
+            //button.enabled = true;
             inputField.text = "";
             inputField.enabled = false;
             // Complete the instruction
@@ -122,7 +147,7 @@ namespace OpenAI
                 Debug.LogWarning("No text was generated from this prompt.");
             }
 
-            button.enabled = true;
+            //button.enabled = true;
             inputField.enabled = true;
         }
     }

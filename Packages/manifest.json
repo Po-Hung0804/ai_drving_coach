@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "com.github.asus4.tflite": "https://github.com/asus4/tf-lite-unity-sample.git?path=/Packages/com.github.asus4.tflite",
     "com.srcnalt.openai-unity": "https://github.com/srcnalt/OpenAI-Unity.git",
     "com.unity.collab-proxy": "2.0.5",
     "com.unity.feature.development": "1.0.2",

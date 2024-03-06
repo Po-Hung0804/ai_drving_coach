@@ -1,6 +1,7 @@
 ﻿using OpenAI;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Collections.Generic;
 
 namespace Samples.Whisper
 {
@@ -19,7 +20,8 @@ namespace Samples.Whisper
         private bool isRecording;
         private float time;
         private OpenAIApi openai = new OpenAIApi();
-
+        public bool issending=false;
+        
         private void Start()
         {
             #if UNITY_WEBGL && !UNITY_EDITOR
@@ -58,7 +60,8 @@ namespace Samples.Whisper
         private async void EndRecording()
         {
             message.text = "Transcripting...";
-            
+            ChatGPT gpt = GameObject.FindObjectOfType<ChatGPT>();
+
             #if !UNITY_WEBGL
             Microphone.End(null);
             #endif
@@ -78,6 +81,17 @@ namespace Samples.Whisper
             message.text = res.Text;
             inputfield.text = message.text;
             recordButton.enabled = true;
+            issending = true;
+            if (gpt != null)
+            {
+
+                gpt.ReceiveVariableValue1(issending);
+
+            }
+            else
+            {
+                Debug.LogWarning("error.");
+            }
         }
 
         private void Update()
@@ -92,7 +106,9 @@ namespace Samples.Whisper
                     time = 0;
                     isRecording = false;
                     EndRecording();
+                   
                 }
+
             }
         }
     }

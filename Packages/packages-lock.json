@@ -1,5 +1,12 @@
 {
   "dependencies": {
+    "com.github.asus4.tflite": {
+      "version": "https://github.com/asus4/tf-lite-unity-sample.git?path=/Packages/com.github.asus4.tflite",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "e0f4bed8c03fb10049882f8b91e0d918e8274fd3"
+    },
     "com.srcnalt.openai-unity": {
       "version": "https://github.com/srcnalt/OpenAI-Unity.git",
       "depth": 0,
