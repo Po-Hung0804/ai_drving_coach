@@ -8,11 +8,5 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/projectscene2.unity
     guid: c60dee7db07de974c8720c5dcf239cf8
-  - enabled: 1
-    path: Assets/POLYGON city pack/scene/DemoScene.unity
-    guid: 7759de288f5d4ee449a0ca5e2244944a
-  - enabled: 1
-    path: Assets/Samples/OpenAI Unity/0.1.15/ChatGPT/ChatGPT Sample.unity
-    guid: 523e2a98b1c50374b9e2093bdc0ce4ee
   m_configObjects: {}
   m_UseUCBPForAssetBundles: 0

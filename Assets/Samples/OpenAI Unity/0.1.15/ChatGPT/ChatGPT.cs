@@ -4,6 +4,15 @@ using System.Collections.Generic;
 using System;
 using Unity.VisualScripting;
 using System.Linq.Expressions;
+using System.Collections;
+using Amazon.Polly;
+using Amazon.Runtime;
+using Amazon;
+using Amazon.Polly.Model;
+using System.IO;
+using UnityEngine.Networking;
+using System.Threading.Tasks;
+using System.Numerics;
 
 
 namespace OpenAI
@@ -17,15 +26,15 @@ namespace OpenAI
         
         [SerializeField] private RectTransform sent;
         [SerializeField] private RectTransform received;
-
+        [SerializeField] private AudioSource audioSource;
         public bool VariableValue { get; private set; }
         public bool sending=false;
         private float height;
-        private OpenAIApi openai = new OpenAIApi();
+        private OpenAIApi openai = new OpenAIApi("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");
         private List<ChatMessage> messages = new List<ChatMessage>();
         private string prompt = "You are AI coach, an automated service to teach customer to drive the car. " +
             "You have to teach customer and achieve three targets." +
-            "Your response is only about driving class and response with chinese." +
+            "Your response is only about driving class and response with english." +
             "If customer says somthing which is not about driving class always response about driving class." +
             "Make sure to ask the user relevant follow-up questions." +
             "And follow the target to teach customer."+
@@ -39,49 +48,53 @@ namespace OpenAI
         public bool ai_signal = false;
         public float revise_motor = 0f;
         public bool send = false;
+        public string text;
         public void Start()
         {
- 
-            // button.onClick.AddListener(SendReply);
+            
+            
         }
         public void Update()
         {
+            CarController1 script1Instance = GameObject.FindObjectOfType<CarController1>();
             if (sending == true)
             {
+                
+                if (inputField.text == "I don't know how to start the car."||inputField.text=="I don't know how to start the car"|| inputField.text == "I don't know how to start a car." || inputField.text == "I don't know how to start a car")
+                {
+                    revisestart = true;
+
+                    if (script1Instance != null)
+                    {
+
+                        script1Instance.ReceiveVariableValue(revisestart);
+
+                    }
+                    else
+                    {
+                        Debug.LogWarning("Script1 not found in the scene.");
+                    }
+                }
+                if (inputField.text == "I don't know how to move the car."||inputField.text=="I don't know how to move the car"|| inputField.text=="I don't know how to move a car." || inputField.text == "I don't know how to move a car")
+                {
+                    revise_motor = 50f;
+                    ai_signal = true;
+                    if (script1Instance != null)
+                    {
+                        script1Instance.Recive_ai_signal(ai_signal);
+                        script1Instance.Receivevertical(revise_motor);
+
+                    }
+                    else
+                    {
+                        Debug.LogWarning("Script1 not found in the scene.");
+                    }
+                }
                 SendReply();
                 sending = false;
             }
-            CarController1 script1Instance = GameObject.FindObjectOfType<CarController1>();
-            if (inputField.text == "I don't know how to start the car")
-            {
-                revisestart = true;
-
-                if (script1Instance != null)
-                {
-
-                    script1Instance.ReceiveVariableValue(revisestart); 
-
-                }
-                else
-                {
-                    Debug.LogWarning("Script1 not found in the scene.");
-                }
-            }
-            if(inputField.text=="I don't know how to move the car")
-            {
-                revise_motor = 500f;
-                ai_signal = true;
-                if (script1Instance != null)
-                {
-                    script1Instance.Recive_ai_signal(ai_signal);
-                    script1Instance.Receivevertical(revise_motor);
-
-                }
-                else
-                {
-                    Debug.LogWarning("Script1 not found in the scene.");
-                }
-            }
+            
+            
         }
         public void ReceiveVariableValue1(bool value)
         {
@@ -96,16 +109,29 @@ namespace OpenAI
 
             var item = Instantiate(message.Role == "user" ? sent : received, scroll.content);
             item.GetChild(0).GetChild(0).GetComponent<Text>().text = message.Content;
-            item.anchoredPosition = new Vector2(0, -height);
+            item.anchoredPosition = new UnityEngine.Vector2(0, -height);
             LayoutRebuilder.ForceRebuildLayoutImmediate(item);
             height += item.sizeDelta.y;
             scroll.content.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, height);
             scroll.verticalNormalizedPosition = 0;
         }
+        private void WriteIntoFile(Stream stream)
+        {
+            using (var fileStream = new FileStream($"{Application.persistentDataPath}/audio.mp3", FileMode.Create))
+            {
+                byte[] buffer = new byte[8 * 1024];
+                int bytesRead;
+                while ((bytesRead = stream.Read(buffer, 0, buffer.Length)) > 0)
+                {
+                    fileStream.Write(buffer, 0, bytesRead);
 
+                }
+            }
+        }
         public async void SendReply()
         {
-
+            var credentials = new BasicAWSCredentials("AKIAQ3EGUSX2MWBWPZ5U", "qog2t2ABw3DQ0uz/SSSQP3vfFGnRI/x9Ct7xhClv");
+            var client = new AmazonPollyClient(credentials, RegionEndpoint.EUCentral1);
 
             var newMessage = new ChatMessage()
             {
@@ -124,7 +150,7 @@ namespace OpenAI
             }
             messages.Add(newMessage);
             
-            //button.enabled = true;
+            button.enabled = true;
             inputField.text = "";
             inputField.enabled = false;
             // Complete the instruction
@@ -140,14 +166,37 @@ namespace OpenAI
                 message.Content = message.Content.Trim();
                 
                 messages.Add(message);
+                text = message.Content.ToString();
                 AppendMessage(message);
             }
             else
             {
                 Debug.LogWarning("No text was generated from this prompt.");
             }
+            
+            var request = new SynthesizeSpeechRequest()
+            {
+                Text = text,
+                Engine = Engine.Neural,
+                VoiceId = VoiceId.Aria,
+                OutputFormat = OutputFormat.Mp3
+            };
 
-            //button.enabled = true;
+            var response = await client.SynthesizeSpeechAsync(request);
+            WriteIntoFile(response.AudioStream);
+
+            using (var www = UnityWebRequestMultimedia.GetAudioClip($"{Application.persistentDataPath}/audio.mp3", AudioType.MPEG))
+            {
+                var op = www.SendWebRequest();
+                while (!op.isDone) await Task.Yield();
+
+                var clip = DownloadHandlerAudioClip.GetContent(www);
+
+                audioSource.clip = clip;
+                audioSource.Play();
+            }
+
+            button.enabled = true;
             inputField.enabled = true;
         }
     }
