@@ -130,7 +130,7 @@ namespace OpenAI
         }
         public async void SendReply()
         {
-            var credentials = new BasicAWSCredentials("AKIAQ3EGUSX2MWBWPZ5U", "qog2t2ABw3DQ0uz/SSSQP3vfFGnRI/x9Ct7xhClv");
+            var credentials = new BasicAWSCredentials("your key","your secreat key");
             var client = new AmazonPollyClient(credentials, RegionEndpoint.EUCentral1);
 
             var newMessage = new ChatMessage()
