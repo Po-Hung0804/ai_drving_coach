@@ -30,7 +30,7 @@ namespace OpenAI
         public bool VariableValue { get; private set; }
         public bool sending=false;
         private float height;
-        private OpenAIApi openai = new OpenAIApi("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");
+        private OpenAIApi openai = new OpenAIApi();
         private List<ChatMessage> messages = new List<ChatMessage>();
         private string prompt = "You are AI coach, an automated service to teach customer to drive the car. " +
             "You have to teach customer and achieve three targets." +
