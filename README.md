@@ -1,6 +1,7 @@
 ## Introduction
 The main purpose of this project is to provide drivers with personalized training plans and systematically guide them.  
-## Methods I uesd in this program:  
+## Strucutr of the program:  
+![image] (structure.jpg)
 
 ## The basic operation of the car:  
 On the keyboard, the W,A,S,D keys control the direction of the car's movement.  
