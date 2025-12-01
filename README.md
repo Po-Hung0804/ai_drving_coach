@@ -18,4 +18,6 @@ You can ask smart-driving-coach for help, and the smart-driving-coach will provi
 
 >[!IMPORTANT]
 >Thanks to Sarge for providing the openai unity package:https://github.com/srcnalt
+
+>[!Project Report and Technical Documentation]
 >[Click here to view the complete project technical report (PDF file)](one_year_capstone_project.pdf)
